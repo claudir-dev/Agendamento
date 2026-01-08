@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+📅 Funcionalidades do Sistema de Agendamento
+🟢 Funcionalidades Principais (MVP)
+👤 Usuário
 
-## Getting Started
+Selecionar data do agendamento
 
-First, run the development server:
+Visualizar horários disponíveis
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Selecionar um horário
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Preencher nome e e-mail
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Confirmar agendamento
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visualizar mensagem de confirmação
 
-## Learn More
+----------------------------------------
 
-To learn more about Next.js, take a look at the following resources:
+🕒 Gerenciamento de Horários
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Horários fixos configuráveis (ex: 08:00 às 18:00)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Intervalos de tempo (30 ou 60 minutos)
 
-## Deploy on Vercel
+Bloqueio automático de horários já agendados
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Impedir agendamento em datas passadas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+----------------------------------------
+
+🧠 Validações
+
+Campos obrigatórios
+
+Validação de e-mail
+
+Impedir agendamento duplicado
+
+Desabilitar botão de confirmação até tudo estar válido
+
+-----------------------------------------------
+
+🟡 Funcionalidades Intermediárias
+💾 Persistência de Dados
+
+Salvar agendamentos no localStorage (versão frontend)
+
+Integração com API REST (versão backend)
+
+----------------------------------------------
+
+🎨 Interface (UX)
+
+Calendário ou date picker
+
+Botões de horário com estados:
+
+Disponível
+
+Selecionado
+
+Indisponível
+
+Feedback visual (loading, sucesso, erro)
+
+Layout responsivo (mobile e desktop)
+
+--------------------------------------------
+
+🔵 Funcionalidades Avançadas (Evolução)
+🔐 Administração
+
+Login de administrador
+
+Visualizar todos os agendamentos
+
+Cancelar agendamentos
+
+Bloquear horários manualmente
+
+📊 Painel Administrativo
+
+Lista de agendamentos por data
+
+Filtro por período
+
+Status do agendamento (ativo / cancelado)
+
+-------------------------------------------
+
+🔔 Notificações
+
+Confirmação visual do agendamento
+
+(Opcional) Envio de e-mail de confirmação
+
+(Opcional) Lembrete antes do horário
