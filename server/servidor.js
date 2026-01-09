@@ -20,10 +20,24 @@ db.prepare(`
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            senha TEXT,
-            
+            senha TEXT 
         )
     `).run()   
+
+const columns = db.prepare(`PRAGMA table_info(users)`).all()
+
+const existetoken = columns.some(c => c.name === 'token')
+const existeexpira = columns.some(c => c.name == 'token_expira')
+
+
+if(!existetoken) {
+  db.prepare(`ALTER TABLE users ADD COLUMN token TEXT`).run
+  
+}
+if(!existeexpira) {
+  db.prepare(`ALTER TABLE users ADD COLUMN token_expira INTEGER`).run()
+}
+
 
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
@@ -109,7 +123,8 @@ app.post('/login', async (req, res) => {
     }
 })
 app.post('/Esqueci-senha', (req,res) => {
-  const {email} = req.body
+  const {email, userID} = req.body
+  console.log(email)
 
   if(!email) {
     console.log('dados Inegistente')
@@ -130,15 +145,18 @@ app.post('/Esqueci-senha', (req,res) => {
     return res.status(400).json({error: 'Email não encontrado'})
   }  else {
 
-    try {
-      const codigo = Math.floor(1000 + Math.random() * 9000);
-      const expirar = Date.now() + 300000
-      console.log(codigo, expirar) 
+    const userID = busca_emal.id
+    const codigo = Math.floor(1000 + Math.random() * 9000);
+    const expirar = Date.now() + 300000
 
-    } catch(error) {
-      console.log('error na criação do token e tempo de expiração')
-      return res.status(500).json({error: 'error na criação do token e tempo de expiração'})
+    try {
+
+      db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`)
+
+    } catch (error) {
+      console.log('Erro ao cadastra o token no banco de dados')
     }
+    
 
   }
   
