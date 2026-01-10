@@ -7,6 +7,8 @@ import bcrypt from 'bcrypt'
 import { error } from 'console'
 import validator from "validator";
 import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
+dotenv.config()
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded())
@@ -123,8 +125,7 @@ app.post('/login', async (req, res) => {
     }
 })
 app.post('/Esqueci-senha', (req,res) => {
-  const {email, userID} = req.body
-  console.log(email)
+  const {email} = req.body
 
   if(!email) {
     console.log('dados Inegistente')
@@ -151,12 +152,52 @@ app.post('/Esqueci-senha', (req,res) => {
 
     try {
 
-      db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`)
+      const token_upadate = db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`).run(codigo, expirar, email)
 
+      console.log('Token cadastrado com sucesso')
+      
     } catch (error) {
       console.log('Erro ao cadastra o token no banco de dados')
+      return res.status(500).json({error: 'Erro ao cadastra o token no banco de dados'})
     }
+
+    console.log(process.env.Email_pass)
+    console.log(process.env.Email_user)
     
+    try {
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.Email_user,
+          pass: process.env.Email_pass
+        }
+      })
+
+      const link = `http://localhost:3002/nova-senha?token=${codigo}`
+
+      const config_email = {
+        from: process.env.Email_user,
+        port: 587,
+        secure: false,
+        to: email,
+        subject: 'redefinição de senha',
+        Html: `
+          <p>Voce solicitou a redefição de senha.</p>
+          <P>Clique no link abaixo para redefinir sua senha:</p>
+          <a href='${link}'>${link}</a>
+          <p>Esse link é válido por 5 minutos.</p>
+        `
+      }
+
+      const enviar = transporter.sendMail(config_email)
+      console.log('Email enviado com sucesso')
+      return res.json({ message: 'Email enviado com sucesso'})
+
+    } catch (error) {
+      console.log('Error ao enviar email de recuperação para o usúario')
+      return res.status(500).json({error: 'Error ao enviar email de recuperação para o usúario', error})
+    }
 
   }
   

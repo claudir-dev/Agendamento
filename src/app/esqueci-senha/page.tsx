@@ -7,8 +7,6 @@ import { TbArrowAutofitWidth } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 export default function EsqueciSenha() {
   const [email, setemail] = useState('')
-  const userID = localStorage.getItem('userID')
-  console.log(userID)
 
   const Enviar = async () => {
     if(!email) {
@@ -21,7 +19,7 @@ export default function EsqueciSenha() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email, userID})
+      body: JSON.stringify({email})
     })
 
     const response = await request.json()
