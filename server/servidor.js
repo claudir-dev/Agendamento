@@ -4,7 +4,7 @@ import bodyParser from 'body-parser'
 import banco from 'better-sqlite3'
 import { send } from 'process'
 import bcrypt from 'bcrypt'
-import { error } from 'console'
+import { Console, error } from 'console'
 import validator from "validator";
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
@@ -147,12 +147,12 @@ app.post('/Esqueci-senha', (req,res) => {
   }  else {
 
     const userID = busca_emal.id
-    const codigo = Math.floor(1000 + Math.random() * 9000);
+    const token = String(Math.floor(Math.random() * 10000))
     const expirar = Date.now() + 300000
 
     try {
 
-      const token_upadate = db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`).run(codigo, expirar, email)
+      const token_upadate = db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`).run(String(token), expirar, email)
 
       console.log('Token cadastrado com sucesso')
       
@@ -160,9 +160,6 @@ app.post('/Esqueci-senha', (req,res) => {
       console.log('Erro ao cadastra o token no banco de dados')
       return res.status(500).json({error: 'Erro ao cadastra o token no banco de dados'})
     }
-
-    console.log(process.env.Email_pass)
-    console.log(process.env.Email_user)
     
     try {
 
@@ -174,7 +171,7 @@ app.post('/Esqueci-senha', (req,res) => {
         }
       })
 
-      const link = `http://localhost:3002/nova-senha?token=${codigo}`
+      const link = `http://localhost:3000/nova-senha?token=${token}`
 
       const config_email = {
         from: process.env.Email_user,
@@ -182,7 +179,7 @@ app.post('/Esqueci-senha', (req,res) => {
         secure: false,
         to: email,
         subject: 'redefinição de senha',
-        Html: `
+        html: `
           <p>Voce solicitou a redefição de senha.</p>
           <P>Clique no link abaixo para redefinir sua senha:</p>
           <a href='${link}'>${link}</a>
@@ -201,6 +198,52 @@ app.post('/Esqueci-senha', (req,res) => {
 
   }
   
+})
+
+app.post('/nova-senha', (req, res) => {
+    const {novaSenha, token} = req.body 
+    console.log(novaSenha,token)
+
+    if(!novaSenha || !token) {
+      console.log('Dados inegistente')
+      return res.status(401).json({error: 'Dados inegistente'})
+    } 
+
+    try {
+
+      const busca_token = db.prepare(`
+          SELECT * FROM users WHERE token = ?
+        `).get(token)
+
+      if(busca_token) {
+        console.log('token encontrado')
+      } else {
+        console.log('token nao encontrado')
+        return res.status(400).json({error: 'Token não encontrado'})
+      }
+
+      const tempo_token = busca_token.token_expira 
+      console.log(tempo_token)
+      const tempo_atual = Date.now()
+      console.log(tempo_atual)
+
+      if(tempo_atual > tempo_token) {
+        console.log('Token expirado')
+        return res.status(401).json({error: 'Token expirado'})
+      }
+
+    } catch (error) {
+      console.error('erro ao valida token', error)
+    }
+
+    try { 
+
+
+    } catch(error) {
+      console.log('Erro ao cadastrar a nova senha')
+      return res.status(500).json({error: 'Erro ao cadastrar a nova senha'})
+    }
+    
 })
 const port = 3002
 app.listen(port, () => {

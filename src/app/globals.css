@@ -25,6 +25,8 @@
   background: linear-gradient(135deg, #c5b8b8 0%, #f0f5ff 100%);
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   text-align: center;
+  z-index: 1;
+  position: relative;
 }
 
 /* TÍTULO */
@@ -128,4 +130,29 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.enviado {
+  margin: 0 auto;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgb(16, 189, 16);
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: #060c2e;
+  font-weight: bold;
+  position: relative;
+  top: 90px;
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar  {
+  0% {
+    transform: translateY(0);
+  } 50% {
+    transform: translateY(-15px);
+  } 100% {
+    transform: translateY(0);
+  }
 }
