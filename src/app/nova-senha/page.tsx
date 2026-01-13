@@ -32,6 +32,10 @@ export default function ResertSenha () {
     console.log(response)
 
     if(request.ok) {
+      setTimeout(() =>{
+        setanimar(false)
+      },6000)
+      setanimar(true)
 
     } else {
       console.log(response.error)
@@ -40,6 +44,11 @@ export default function ResertSenha () {
   }
   return (
     <main className="page">
+      {animar && (
+        <div className='enviado'>
+          <p>Senha alterada com sucesso</p>
+        </div>
+      )}
       <div className="container">
         <div className="card">
           <div className="title">

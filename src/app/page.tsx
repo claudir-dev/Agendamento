@@ -36,7 +36,7 @@ export default function Login() {
         localStorage.setItem('userID', response.userId)
         router.push('/home')
       } else {
-        alert('Erro interno no servidor, tente mais tarde! ')
+        alert(response.error)
         console.error(response.error)
       }
     } catch(error) { 

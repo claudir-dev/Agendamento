@@ -200,7 +200,7 @@ app.post('/Esqueci-senha', (req,res) => {
   
 })
 
-app.post('/nova-senha', (req, res) => {
+app.post('/nova-senha', async (req, res) => {
     const {novaSenha, token} = req.body 
     console.log(novaSenha,token)
 
@@ -238,9 +238,22 @@ app.post('/nova-senha', (req, res) => {
 
     try { 
 
+      const busca_token_id = db.prepare(`
+          SELECT * FROM users WHERE token =?
+        `).get(token)
+
+      const id_token = busca_token_id.id
+      console.log(id_token)
+
+      const hash = await bcrypt.hash(novaSenha,10)
+      console.log(hash)
+
+      db.prepare(`UPDATE users SET senha = ?,  token = NULL, token_expira = NULL WHERE id = ?`).run(hash, id_token)
+      console.log('senha alterada com sucesso')
+      return res.json({message: 'Senha alterada com sucesso'})
 
     } catch(error) {
-      console.log('Erro ao cadastrar a nova senha')
+      console.log('Erro ao cadastrar a nova senha',error)
       return res.status(500).json({error: 'Erro ao cadastrar a nova senha'})
     }
     

@@ -1,0 +1,10 @@
+.background {
+    background-color: aliceblue;
+    min-height: 100vh;
+}
+.dados {
+  background: #060c2e;
+  color: #cfd6ff;
+  padding: 20px;
+  text-align: center;
+}
