@@ -19,63 +19,65 @@ export default function Home () {
                         </ul>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <h3>Agenda Seu Horário</h3>
-                        <p>Rapído, Facil e sem complicação</p>
+                <div className={styles.info}>
+                    <div className={styles.text}>
+                        <div>
+                            <h3>Agenda Seu Horário</h3>
+                            <p>Rapído, Facil e sem complicação</p>
+                        </div>
+                        <div>
+                            <button>Agendar Agora</button>
+                        </div>
                     </div>
                     <div>
-                        <button>Agendar Agora</button>
+                        <div></div><p>Como funciona</p><div></div>
                     </div>
-                </div>
-                <div>
-                    <div></div><p>Como funciona</p><div></div>
-                </div>
-                <div>
                     <div>
-                        <button>
-                            <div>📅</div>
-                            <div>
-                                <div>1</div>
+                        <div>
+                            <button>
+                                <div>📅</div>
                                 <div>
-                                    <p>Escolher a Data</p>
+                                    <div>1</div>
+                                    <div>
+                                        <p>Escolher a Data</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </button>
+                            </button>
+                        </div>
+                        <div>
+                            <button>
+                                <div>🕒</div>
+                                <div>
+                                    <div>2</div>
+                                    <div>
+                                        <p>Seleciona horário</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div> 
+                        <div>
+                            <button>
+                                <div>✅</div>
+                                <div>
+                                    <div>3</div>
+                                    <div>Meus Agendamentos</div>
+                                </div>
+                            </button>
+                        </div>                       
                     </div>
                     <div>
-                        <button>
-                            <div>🕒</div>
-                            <div>
-                                <div>2</div>
-                                <div>
-                                    <p>Seleciona horário</p>
-                                </div>
-                            </div>
-                        </button>
-                    </div> 
-                    <div>
-                        <button>
-                            <div>✅</div>
-                            <div>
-                                <div>3</div>
-                                <div>Meus Agendamentos</div>
-                            </div>
-                        </button>
-                    </div>                       
-                </div>
-                <div>
-                    <div></div><p>Próximas Disponibilidades</p><div></div>
-                    <div>
+                        <div></div><p>Próximas Disponibilidades</p><div></div>
+                        <div>
 
+                        </div>
+                        <div>
+                            <button>Ver meus horários</button>
+                        </div>
                     </div>
                     <div>
-                        <button>Ver meus horários</button>
+                        <div></div><p>Compromissos</p><div></div>
                     </div>
-                </div>
-                <div>
-                    <div></div><p>Compromissos</p><div></div>
-                </div>
+                </div>    
             </main>
             <footer className={styles.dados}>
                 <p>
