@@ -6,17 +6,17 @@ export default function Home () {
     return (
         <>
             <main className={styles.background}>
-                <div>
-                    <div>
+                <div className={styles.nav}>
+                    <div className={styles.logo}>
                         <Icone></Icone>
                         Agendaki
                     </div>
-                    <div>
-                        <ol>
-                            <li><a href="">Home</a></li>
-                            <li><a href="">Agenda</a></li>
-                            <li><a href="">Contato</a></li>
-                        </ol>
+                    <div className={styles.links}>
+                        <ul className={styles.links_nav}>
+                            <li className={styles.lista}><a className={styles.items} href="">Home</a></li>
+                            <li className={styles.lista}><a className={styles.items} href="">Agenda</a></li>
+                            <li className={styles.lista}><a className={styles.items} href="">Contato</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div>
@@ -27,6 +27,54 @@ export default function Home () {
                     <div>
                         <button>Agendar Agora</button>
                     </div>
+                </div>
+                <div>
+                    <div></div><p>Como funciona</p><div></div>
+                </div>
+                <div>
+                    <div>
+                        <button>
+                            <div>📅</div>
+                            <div>
+                                <div>1</div>
+                                <div>
+                                    <p>Escolher a Data</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div>
+                        <button>
+                            <div>🕒</div>
+                            <div>
+                                <div>2</div>
+                                <div>
+                                    <p>Seleciona horário</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div> 
+                    <div>
+                        <button>
+                            <div>✅</div>
+                            <div>
+                                <div>3</div>
+                                <div>Meus Agendamentos</div>
+                            </div>
+                        </button>
+                    </div>                       
+                </div>
+                <div>
+                    <div></div><p>Próximas Disponibilidades</p><div></div>
+                    <div>
+
+                    </div>
+                    <div>
+                        <button>Ver meus horários</button>
+                    </div>
+                </div>
+                <div>
+                    <div></div><p>Compromissos</p><div></div>
                 </div>
             </main>
             <footer className={styles.dados}>
