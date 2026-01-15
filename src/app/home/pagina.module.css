@@ -22,6 +22,8 @@
   align-items: center;
   justify-content: space-between;
   background-color: #2563EB;
+  padding: 20px 30px;
+  box-shadow: 0px 2px 5px black;
 }
 .logo {
   display: flex;
@@ -57,9 +59,96 @@
 .items:hover::after {
   width: 100%;
 }
-.text {
-  width: 100%;
-  position: relative;
-  top: 30px;
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  
+}
+.heroText {
+  padding-left: 30px;
+}
+.heroText h1 {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.heroText p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.cta {
+  margin-top: 20px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* IMAGEM */
+.heroImg img {
+  width: 500px;
+  height: auto;
+}
+
+/* SECTIONS */
+.section {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 28px;
   margin-bottom: 40px;
 }
+
+/* STEPS */
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.card {
+  background: white;
+  color: #333;
+  padding: 30px;
+  width: 220px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+.card span {
+  font-size: 32px;
+}
+
+/* DISPONIBILIDADES */
+.availability {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.availCard,
+.availCardDark {
+  padding: 25px 40px;
+  border-radius: 16px;
+  background: white;
+  color: #333;
+}
+
+.availCardDark {
+  background: #123a7c;
+  color: white;
+}
+
+.secondaryBtn {
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+}
+

@@ -2,6 +2,9 @@
 import { FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
 import Icone from '@/app/components/icone'
 import styles from '@/app/home/pagina.module.css'
+import Image from 'next/image'
+import Img from '@/app/assets/baner.png'
+
 export default function Home () {
     return (
         <>
@@ -19,65 +22,58 @@ export default function Home () {
                         </ul>
                     </div>
                 </div>
-                <div className={styles.info}>
-                    <div className={styles.text}>
-                        <div>
-                            <h3>Agenda Seu Horário</h3>
-                            <p>Rapído, Facil e sem complicação</p>
-                        </div>
-                        <div>
-                            <button>Agendar Agora</button>
-                        </div>
+                <section className={styles.hero}>
+                    <div className={styles.heroText}>
+                        <h1>Agenda Seu Horário</h1>
+                        <p>Rápido, fácil e sem complicação.</p>
+                        <button className={styles.cta}>Agendar Agora</button>
                     </div>
-                    <div>
-                        <div></div><p>Como funciona</p><div></div>
-                    </div>
-                    <div>
-                        <div>
-                            <button>
-                                <div>📅</div>
-                                <div>
-                                    <div>1</div>
-                                    <div>
-                                        <p>Escolher a Data</p>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div>
-                            <button>
-                                <div>🕒</div>
-                                <div>
-                                    <div>2</div>
-                                    <div>
-                                        <p>Seleciona horário</p>
-                                    </div>
-                                </div>
-                            </button>
-                        </div> 
-                        <div>
-                            <button>
-                                <div>✅</div>
-                                <div>
-                                    <div>3</div>
-                                    <div>Meus Agendamentos</div>
-                                </div>
-                            </button>
-                        </div>                       
-                    </div>
-                    <div>
-                        <div></div><p>Próximas Disponibilidades</p><div></div>
-                        <div>
 
+                    <div className={styles.heroImg}>
+                        <Image src={Img} alt="Ilustração de agenda" />
+                    </div>
+                </section>
+
+                <section className={styles.section}>
+                    <h2>Como Funciona</h2>
+
+                    <div className={styles.steps}>
+                        <div className={styles.card}>
+                        <span>📅</span>
+                        <p><strong>1</strong><br />Escolha a data</p>
                         </div>
-                        <div>
-                            <button>Ver meus horários</button>
+
+                        <div className={styles.card}>
+                        <span>🕒</span>
+                        <p><strong>2</strong><br />Selecione o horário</p>
+                        </div>
+
+                        <div className={styles.card}>
+                        <span>✅</span>
+                        <p><strong>3</strong><br />Confirme o agendamento</p>
                         </div>
                     </div>
-                    <div>
-                        <div></div><p>Compromissos</p><div></div>
+                    </section>
+
+                    {/* DISPONIBILIDADES */}
+                    <section className={styles.section}>
+                    <h2>Próximas Disponibilidades</h2>
+
+                    <div className={styles.availability}>
+                        <div className={styles.availCard}>
+                        <strong>Amanhã</strong>
+                        <span>5 horários disponíveis</span>
+                        </div>
+
+                        <div className={styles.availCardDark}>
+                        <strong>Quarta-feira, 15 Mai</strong>
+                        <span>3 horários disponíveis</span>
+                        </div>
                     </div>
-                </div>    
+
+                    <button className={styles.secondaryBtn}>Ver horários</button>
+                </section>
+    
             </main>
             <footer className={styles.dados}>
                 <p>
