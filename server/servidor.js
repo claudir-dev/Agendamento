@@ -1,45 +1,43 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import banco from 'better-sqlite3'
+import postresql from 'pg'
 import { send } from 'process'
 import bcrypt from 'bcrypt'
 import { Console, error } from 'console'
 import validator from "validator";
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import { TbPoolOff } from 'react-icons/tb'
 dotenv.config()
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 
-const db = new banco('banco_dados.db') 
+  const {Pool} = postresql
 
+  const pool = new Pool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  })
+ 
+async function testaconexao() {
+  try{
+    await pool.connect()
+    console.log('Conectado ao servidor PostreSql')
 
-db.prepare(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            senha TEXT 
-        )
-    `).run()   
-
-const columns = db.prepare(`PRAGMA table_info(users)`).all()
-
-const existetoken = columns.some(c => c.name === 'token')
-const existeexpira = columns.some(c => c.name == 'token_expira')
-
-
-if(!existetoken) {
-  db.prepare(`ALTER TABLE users ADD COLUMN token TEXT`).run
-  
-}
-if(!existeexpira) {
-  db.prepare(`ALTER TABLE users ADD COLUMN token_expira INTEGER`).run()
+    const res = await pool.query('SELECT version()')
+    console.log(res.rows)
+  } catch(err) {
+    console.log('Erro ao se conectar ao servidor PostreSQL',err)
+  }
 }
 
+testaconexao()
 
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
@@ -58,9 +56,10 @@ app.post('/criar-conta', async (req, res) => {
   }
 
   try {
-    const existe = db
-      .prepare('SELECT * FROM users WHERE email = ?')
-      .get(email);
+    const existe = await pool.query(
+      'SELECT * FROM cadastro WHERE email = $1',
+      [email]
+    )
 
     if (existe) {
       return res.status(400).json({ error: 'Usuário já cadastrado' });
@@ -69,9 +68,10 @@ app.post('/criar-conta', async (req, res) => {
     const hash = await bcrypt.hash(senha, 10)
     console.log(hash)
 
-    db.prepare(
-      'INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)'
-    ).run(nome, email, hash);
+    await pool.query(
+      'INSERT INTO cadastro (nome, email, senha) VALUES ($1, $2, $3)',
+      [nome, email, hash]
+    )
 
     return res.json({ message: 'Usuário cadastrado com sucesso',});
 
@@ -96,14 +96,17 @@ app.post('/login', async (req, res) => {
 
     try {
       
-      const busca = db.prepare(`
-          SELECT * FROM users WHERE email = ?
-        `).get(email)
+      const busca = await pool.query(
+          'SELECT * FROM cadastro WHERE email = $1',
+          [email]
+        )
 
         if(!busca) {
           console.log('Usuario nao encontrado')
           return res.status(400).json({error: 'Usuario não encontrado'})
         } 
+
+        console.log(busca)
 
         const senhaBanco = busca.senha
 
@@ -124,7 +127,7 @@ app.post('/login', async (req, res) => {
       return res.status(500).json({error: 'Erro interno na rota da API'})
     }
 })
-app.post('/Esqueci-senha', (req,res) => {
+app.post('/Esqueci-senha', async (req,res) => {
   const {email} = req.body
 
   if(!email) {
@@ -137,9 +140,10 @@ app.post('/Esqueci-senha', (req,res) => {
     return res.status(401).json({error: 'Email inválido'})
   }
 
-  const busca_emal = db.prepare(`
-      SELECT * FROM users WHERE email = ?
-    `).get(email)
+  const busca_emal = await pool.query(
+      'SELECT * FROM cadastro WHERE email = $1',
+      [email]
+    )
 
   if(!busca_emal) {
     console.log('Email não encontrado')
@@ -152,7 +156,9 @@ app.post('/Esqueci-senha', (req,res) => {
 
     try {
 
-      const token_upadate = db.prepare(`UPDATE users SET token = ?, token_expira = ? WHERE email = ?`).run(String(token), expirar, email)
+      const token_upadate = await pool.query('INSET INTO cadastro WHERE email = $1 token_codigo = $1 codigo_expirar = $3 ',
+        [email,token,expirar]
+      )
 
       console.log('Token cadastrado com sucesso')
       
@@ -211,9 +217,9 @@ app.post('/nova-senha', async (req, res) => {
 
     try {
 
-      const busca_token = db.prepare(`
-          SELECT * FROM users WHERE token = ?
-        `).get(token)
+      const busca_token = await pool.query(`
+          SELECT * FROM cadastro WHERE token_codigo = $1
+        `, [token])
 
       if(busca_token) {
         console.log('token encontrado')
@@ -238,9 +244,9 @@ app.post('/nova-senha', async (req, res) => {
 
     try { 
 
-      const busca_token_id = db.prepare(`
-          SELECT * FROM users WHERE token =?
-        `).get(token)
+      const busca_token_id = await pool.query(`
+          SELECT * FROM users WHERE token_codigo = $1
+        `, [token])
 
       const id_token = busca_token_id.id
       console.log(id_token)
@@ -248,7 +254,7 @@ app.post('/nova-senha', async (req, res) => {
       const hash = await bcrypt.hash(novaSenha,10)
       console.log(hash)
 
-      db.prepare(`UPDATE users SET senha = ?,  token = NULL, token_expira = NULL WHERE id = ?`).run(hash, id_token)
+      db.prepare(`UPDATE cadastro SET senha = $1,  token_codigo = NULL, token_expirar = NULL WHERE id = ?`).run(hash, id_token)
       console.log('senha alterada com sucesso')
       return res.json({message: 'Senha alterada com sucesso'})
 

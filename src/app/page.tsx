@@ -9,7 +9,6 @@ export default function Login() {
   const [senha, setsenha] = useState('')
   const router = useRouter()
   const Login = async () => {
-
     try {
 
       if (!email || !senha) {
