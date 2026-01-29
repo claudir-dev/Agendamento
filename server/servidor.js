@@ -29,9 +29,6 @@ async function testaconexao() {
   try{
     await pool.connect()
     console.log('Conectado ao servidor PostreSql')
-
-    const res = await pool.query('SELECT version()')
-    console.log(res.rows)
   } catch(err) {
     console.log('Erro ao se conectar ao servidor PostreSQL',err)
   }
@@ -60,8 +57,10 @@ app.post('/criar-conta', async (req, res) => {
       'SELECT * FROM cadastro WHERE email = $1',
       [email]
     )
+     
+    console.log('result',existe)
 
-    if (existe) {
+    if (existe.rows.length > 0) {
       return res.status(400).json({ error: 'Usuário já cadastrado' });
     }
 
@@ -83,6 +82,7 @@ app.post('/criar-conta', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const {email, senha} = req.body
+    console.log(email, senha)
 
     if (!email, !senha) {
       console.log('dados inválidos')
@@ -101,14 +101,15 @@ app.post('/login', async (req, res) => {
           [email]
         )
 
-        if(!busca) {
+        if(busca.rows.length === 0) {
           console.log('Usuario nao encontrado')
           return res.status(400).json({error: 'Usuario não encontrado'})
         } 
 
         console.log(busca)
 
-        const senhaBanco = busca.senha
+        const senhaBanco = busca.rows[0].senha
+        console.log(senhaBanco)
 
         const senhaValida = await bcrypt.compare(
           senha, senhaBanco
@@ -145,7 +146,7 @@ app.post('/Esqueci-senha', async (req,res) => {
       [email]
     )
 
-  if(!busca_emal) {
+  if(!busca_emal.rows === 0) {
     console.log('Email não encontrado')
     return res.status(400).json({error: 'Email não encontrado'})
   }  else {
@@ -221,14 +222,14 @@ app.post('/nova-senha', async (req, res) => {
           SELECT * FROM cadastro WHERE token_codigo = $1
         `, [token])
 
-      if(busca_token) {
+      if(busca_token.rows ) {
         console.log('token encontrado')
       } else {
         console.log('token nao encontrado')
         return res.status(400).json({error: 'Token não encontrado'})
       }
 
-      const tempo_token = busca_token.token_expira 
+      const tempo_token = busca_token.rows.token_expira 
       console.log(tempo_token)
       const tempo_atual = Date.now()
       console.log(tempo_atual)
@@ -245,7 +246,7 @@ app.post('/nova-senha', async (req, res) => {
     try { 
 
       const busca_token_id = await pool.query(`
-          SELECT * FROM users WHERE token_codigo = $1
+          SELECT * FROM cadastro WHERE token_codigo = $1
         `, [token])
 
       const id_token = busca_token_id.id
