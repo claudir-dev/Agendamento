@@ -35,7 +35,11 @@ export default function Home () {
                 </section>
 
                 <section className={styles.section}>
-                    <h2>Como Funciona</h2>
+                    <div className={styles.subtext}>
+                        <div className={styles.linha}></div>
+                        <h2 >Como Funciona</h2>
+                        <div className={styles.linha}></div>
+                    </div>    
 
                     <div className={styles.steps}>
                         <div className={styles.card}>
@@ -57,7 +61,11 @@ export default function Home () {
 
                     {/* DISPONIBILIDADES */}
                     <section className={styles.section}>
-                    <h2>Próximas Disponibilidades</h2>
+                    <div className={styles.subtext}>
+                        <div></div>
+                        <h2>Próximas Disponibilidades</h2>
+                        <div></div>
+                    </div>    
 
                     <div className={styles.availability}>
                         <div className={styles.availCard}>

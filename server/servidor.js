@@ -153,18 +153,18 @@ app.post('/Esqueci-senha', async (req,res) => {
 
     const userID = busca_emal.id
     const token = String(Math.floor(Math.random() * 10000))
-    const expirar = Date.now() + 300000
+    const expirar = new Date(Date.now() + 5 * 60 * 1000)
 
     try {
 
-      const token_upadate = await pool.query('INSET INTO cadastro WHERE email = $1 token_codigo = $1 codigo_expirar = $3 ',
-        [email,token,expirar]
+      const token_upadate = await pool.query('UPDATE cadastro SET token_codigo = $1, token_expirar = $2  WHERE email = $3',
+        [token,expirar, email]
       )
 
       console.log('Token cadastrado com sucesso')
       
     } catch (error) {
-      console.log('Erro ao cadastra o token no banco de dados')
+      console.log('Erro ao cadastra o token no banco de dados',error)
       return res.status(500).json({error: 'Erro ao cadastra o token no banco de dados'})
     }
     
@@ -222,16 +222,17 @@ app.post('/nova-senha', async (req, res) => {
           SELECT * FROM cadastro WHERE token_codigo = $1
         `, [token])
 
-      if(busca_token.rows ) {
+        console.log(busca_token)
+
+      if(busca_token.rows ) { 
         console.log('token encontrado')
       } else {
         console.log('token nao encontrado')
         return res.status(400).json({error: 'Token não encontrado'})
       }
 
-      const tempo_token = busca_token.rows.token_expira 
-      console.log(tempo_token)
-      const tempo_atual = Date.now()
+      const tempo_token = busca_token.rows[0].token_expirar
+      const tempo_atual = new Date()
       console.log(tempo_atual)
 
       if(tempo_atual > tempo_token) {
@@ -249,13 +250,15 @@ app.post('/nova-senha', async (req, res) => {
           SELECT * FROM cadastro WHERE token_codigo = $1
         `, [token])
 
-      const id_token = busca_token_id.id
+      const id_token = busca_token_id.rows[0].id
       console.log(id_token)
 
       const hash = await bcrypt.hash(novaSenha,10)
       console.log(hash)
 
-      db.prepare(`UPDATE cadastro SET senha = $1,  token_codigo = NULL, token_expirar = NULL WHERE id = ?`).run(hash, id_token)
+      await pool.query(`UPDATE cadastro SET senha = $1, token_codigo = NULL, token_expirar = NULL WHERE id = $2`, 
+        [hash,id_token]
+      )
       console.log('senha alterada com sucesso')
       return res.json({message: 'Senha alterada com sucesso'})
 

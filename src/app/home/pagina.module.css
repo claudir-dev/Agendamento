@@ -95,7 +95,6 @@
 
 /* SECTIONS */
 .section {
-  margin-top: 100px;
   text-align: center;
 }
 
@@ -114,10 +113,11 @@
 .card {
   background: white;
   color: #333;
-  padding: 30px;
+  padding: 20px;
   width: 220px;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  box-shadow: 0 5px 30px 3px;
+  margin-bottom: 40px;
 }
 
 .card span {
@@ -150,5 +150,16 @@
   border-radius: 10px;
   border: none;
   font-weight: bold;
+  margin-bottom: 40px;
 }
-
+.subtext {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 10px;
+}
+.linha {
+  width: 100px;
+  border: 1px solid;
+  margin-top: -36px;
+}
