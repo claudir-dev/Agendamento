@@ -253,7 +253,7 @@ app.post('/nova-senha', async (req, res) => {
       const id_token = busca_token_id.rows[0].id
       console.log(id_token)
 
-      const hash = await bcrypt.hash(novaSenha,10)
+      const hash = await bcrypt.hash(novaSenha,10)  
       console.log(hash)
 
       await pool.query(`UPDATE cadastro SET senha = $1, token_codigo = NULL, token_expirar = NULL WHERE id = $2`, 

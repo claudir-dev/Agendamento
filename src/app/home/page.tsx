@@ -4,8 +4,13 @@ import Icone from '@/app/components/icone'
 import styles from '@/app/home/pagina.module.css'
 import Image from 'next/image'
 import Img from '@/app/assets/baner.png'
+import { useRouter } from "next/navigation";
 
 export default function Home () {
+    const router = useRouter()
+    const Abadata = () => {
+        router.push('/escolher-data')
+    }
     return (
         <>
             <main className={styles.background}>
@@ -42,7 +47,7 @@ export default function Home () {
                     </div>    
 
                     <div className={styles.steps}>
-                        <div className={styles.card}>
+                        <div className={styles.card} onClick={Abadata}>
                         <span>📅</span>
                         <p><strong>1</strong><br />Escolha a data</p>
                         </div>
