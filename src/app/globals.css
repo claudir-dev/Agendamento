@@ -183,3 +183,43 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
+
+.rdp {
+  --rdp-cell-size: 42px;
+  --rdp-accent-color: #2563eb;
+  --rdp-background-color: #dbeafe;
+  font-family: inherit;
+}
+
+/* Dias */
+.rdp-day {
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.rdp-day:hover {
+  background-color: #dbeafe;
+}
+
+/* Selecionado */
+.rdp-day_selected {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+
+/* Hoje */
+.rdp-day_today {
+  border: 2px solid #2563eb;
+}
+
+/* Domingo */
+.rdp-day[data-weekday="0"] {
+  color: #ef4444;
+}
+
+/* Sábado */
+.rdp-day[data-weekday="6"] {
+  color: #2563eb;
+}

@@ -171,3 +171,11 @@
   border: 1px solid;
   margin-top: -36px;
 }
+.rdp-day[data-weekday="0"] {
+  color: red;
+}
+
+/* Sábados */
+.rdp-day[data-weekday="6"] {
+  color: blue;
+}

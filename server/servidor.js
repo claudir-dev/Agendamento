@@ -268,6 +268,9 @@ app.post('/nova-senha', async (req, res) => {
     }
     
 })
+app.post('/Escolher-data', (req,res) => {
+  const {date} = req.body
+})
 const port = 3002
 app.listen(port, () => {
     console.log(`Servidor rodando na porta, ${port}`)

@@ -1,0 +1,89 @@
+
+.calendar_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    
+}
+.title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+.card_calender {
+  width: 420px;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+.calender {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: black;
+}
+
+.linha {
+    border: solid 1px rgb(235, 224, 224);
+    margin-bottom: 10px;
+}
+.label {
+    color: black;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.Observacoes {
+    display: flex;
+    flex-direction: column;
+}
+.div_date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.date_input {
+    text-align: center;
+}
+.icone_calender {
+    position: relative;
+    right: 23px;
+    color: #374151;
+}
+.textarea {
+    height: 70px;
+    outline: none;
+}
+.div_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.btn {
+    margin-top: 18px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.btn:hover {
+    transform: scale(1.04);
+}
+
+.calendar {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+}
