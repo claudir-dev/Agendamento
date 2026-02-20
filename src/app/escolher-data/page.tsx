@@ -4,7 +4,7 @@ import { useState } from 'react'
 import {DayPicker} from 'react-day-picker'
 import styles from '@/app/escolher-data/calender.module.css'
 import { FaCalendar } from 'react-icons/fa';
-
+import {ptBR} from 'date-fns/locale' 
 export default function EscolherData() {
   const [date, setDate] = useState<Date | undefined>()
   const [invalido, setinvalido] = useState(false)
@@ -37,6 +37,7 @@ export default function EscolherData() {
           <p>{texto}</p>
         </div>
       )}
+
       <div className={styles.card_calender}>
         <div className={styles.title}>
           <h2>📅 Escolher data</h2>
@@ -49,13 +50,8 @@ export default function EscolherData() {
             mode='single'
             selected={date}
             onSelect={setDate}
-            classNames={{
-              root: styles.calendar,
-              day: styles.day,
-              day_selected: styles.selected,
-              day_today: styles.today,
-            }}
-            
+            className={styles.calender}
+            locale={ptBR}
           />
           
           <div className={styles.div_date}>

@@ -9,6 +9,8 @@ import validator from "validator";
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import { TbPoolOff } from 'react-icons/tb'
+import { IoMdReturnRight } from 'react-icons/io'
+import session from 'express-session'
 dotenv.config()
 const app = express()
 app.use(cors())
@@ -36,6 +38,15 @@ async function testaconexao() {
 
 testaconexao()
 
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false
+  }
+}))
+
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
 });
@@ -58,7 +69,6 @@ app.post('/criar-conta', async (req, res) => {
       [email]
     )
      
-    console.log('result',existe)
 
     if (existe.rows.length > 0) {
       return res.status(400).json({ error: 'Usuário já cadastrado' });
@@ -106,8 +116,6 @@ app.post('/login', async (req, res) => {
           return res.status(400).json({error: 'Usuario não encontrado'})
         } 
 
-        console.log(busca)
-
         const senhaBanco = busca.rows[0].senha
         console.log(senhaBanco)
 
@@ -120,8 +128,12 @@ app.post('/login', async (req, res) => {
           return res.status(401).json({error: 'Senha invalida'})
         }
 
+        req.session.userid = busca.rows[0].id
+        console.log(req.session.userid)
+
         console.log('Senha correta')
-        return res.json({message: 'Senha correta',userId: busca.id})
+        return res.json({message: 'Senha correta'})
+        
 
     } catch (error) {
       console.log('Erro encontrado', error)
@@ -268,8 +280,35 @@ app.post('/nova-senha', async (req, res) => {
     }
     
 })
-app.post('/Escolher-data', (req,res) => {
+app.post('/Escolher-data', async (req,res) => {
   const {date} = req.body
+  console.log(date)
+  const userid = req.session.userid
+  console.log(userid)
+
+  if(!date) {
+    res.status(400).json({error: 'dados invalidos'})
+    return
+  }
+
+  try {
+
+    const search_date = await pool.query('SELECT * FROM agendamento_datas WHERE datas = $1', 
+      [date]
+    )
+
+    if(search_date) {
+      res.status(402).json({error: 'Esta data ja possui um agendamento'})
+      return
+    }
+
+    const register_date = await pool.query('INSERT INTO agandamento_datas (datas, id_usuarios) VALUES ($1, $2)', [date,userid])
+
+    console.log(register_date)
+
+  } catch (error) {
+    res.status(500).json({error: 'Error interno', error })
+  }  
 })
 const port = 3002
 app.listen(port, () => {
