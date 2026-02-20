@@ -13,7 +13,10 @@ import { IoMdReturnRight } from 'react-icons/io'
 import session from 'express-session'
 dotenv.config()
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}))
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 
@@ -43,7 +46,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false
+    secure: false,
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60
   }
 }))
 
@@ -281,12 +286,12 @@ app.post('/nova-senha', async (req, res) => {
     
 })
 app.post('/Escolher-data', async (req,res) => {
-  const {date} = req.body
-  console.log(date)
+  const {dateISO} = req.body
+  console.log(dateISO)
   const userid = req.session.userid
   console.log(userid)
 
-  if(!date) {
+  if(!dateISO) {
     res.status(400).json({error: 'dados invalidos'})
     return
   }
@@ -294,7 +299,7 @@ app.post('/Escolher-data', async (req,res) => {
   try {
 
     const search_date = await pool.query('SELECT * FROM agendamento_datas WHERE datas = $1', 
-      [date]
+      [dateISO]
     )
 
     if(search_date) {
@@ -302,7 +307,7 @@ app.post('/Escolher-data', async (req,res) => {
       return
     }
 
-    const register_date = await pool.query('INSERT INTO agandamento_datas (datas, id_usuarios) VALUES ($1, $2)', [date,userid])
+    const register_date = await pool.query('INSERT INTO agandamento_datas (datas, id_usuarios) VALUES ($1, $2)', [dateISO,userid])
 
     console.log(register_date)
 

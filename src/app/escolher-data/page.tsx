@@ -14,7 +14,7 @@ export default function EscolherData() {
   const confirmar = async () => {
     const dateISO = date?.toISOString()
     
-    if(!date) {
+    if(!dateISO) {
       settexto('Dados invalidos')
       setinvalido(true)
       return
@@ -25,7 +25,8 @@ export default function EscolherData() {
       headers: {
         'Content-Type' : 'application/json'
       },
-      body: JSON.stringify({date})
+      body: JSON.stringify({dateISO}),
+      credentials: 'include'
     })
   }
   
