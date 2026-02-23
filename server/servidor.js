@@ -69,7 +69,12 @@ const requerLogin = (req, res, next) => {
 }
 
 const jaLogado = (res, req, next) => {
-  if
+  if (req.session.userid) {
+    return res.redirect('/dashoard')
+  }
+  else {
+    next()
+  }
 }
 
 app.get('/', (req, res) => {
