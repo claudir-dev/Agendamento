@@ -11,7 +11,9 @@ import dotenv from 'dotenv'
 import { TbPoolOff } from 'react-icons/tb'
 import { IoMdReturnRight } from 'react-icons/io'
 import session from 'express-session'
-dotenv.config()
+import pgSession from 'connect-pg-simple'
+import next from 'next'
+dotenv.config()  
 const app = express()
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -41,16 +43,34 @@ async function testaconexao() {
 
 testaconexao()
 
+const PostgresStore = pgSession(session)
+
 app.use(session({
+  store: new PostgresStore({
+    pool: pool,
+    tableName: 'session'
+  }),
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60
+    maxAge: 30 * 24 * 60 * 60 * 1000
   }
 }))
+
+const requerLogin = (req, res, next) => {
+  if (req.session.userid) {
+    next() 
+  } else {
+    res.redirect('/login')
+  }
+}
+
+const jaLogado = (res, req, next) => {
+  if
+}
 
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
@@ -82,12 +102,21 @@ app.post('/criar-conta', async (req, res) => {
     const hash = await bcrypt.hash(senha, 10)
     console.log(hash)
 
-    await pool.query(
+    const novoUsuario = await pool.query(
       'INSERT INTO cadastro (nome, email, senha) VALUES ($1, $2, $3)',
       [nome, email, hash]
     )
 
-    return res.json({ message: 'Usuário cadastrado com sucesso',});
+    const userid = novoUsuario.rows[0].id
+    req.session.userid = userid
+
+    req.session.save((err) => {
+      if(err) { 
+        return res.status(500).json({error: 'Erro ao criar sessão'})
+      }
+
+      return res.json({ message: 'Usuário cadastrado com sucesso',});
+    })
 
   } catch (error) {
     console.error('Erro ao cadastrar usuário', error);
@@ -99,7 +128,7 @@ app.post('/login', async (req, res) => {
     const {email, senha} = req.body
     console.log(email, senha)
 
-    if (!email, !senha) {
+    if (!email || !senha) {
       console.log('dados inválidos')
       return res.status(400).json({error: 'Dados inválidos'})
     }
@@ -134,10 +163,16 @@ app.post('/login', async (req, res) => {
         }
 
         req.session.userid = busca.rows[0].id
-        console.log(req.session.userid)
+        
+        req.session.save((err) => {
+          if (err) {
+            console.log('Erro ao salvar sessão:', err)
+            return res.status(500).json({Error: 'Erro ao processar o login'})
+          }
+          res.json({message: 'login realizado com sucesso'})
+        })
 
         console.log('Senha correta')
-        return res.json({message: 'Senha correta'})
         
 
     } catch (error) {
@@ -302,7 +337,7 @@ app.post('/Escolher-data', async (req,res) => {
       [dateISO]
     )
 
-    if(search_date) {
+    if(search_date.rowCount > 0) {
       res.status(402).json({error: 'Esta data ja possui um agendamento'})
       return
     }
@@ -313,6 +348,7 @@ app.post('/Escolher-data', async (req,res) => {
 
   } catch (error) {
     res.status(500).json({error: 'Error interno', error })
+    console.log('Erro interno', error)
   }  
 })
 const port = 3002
