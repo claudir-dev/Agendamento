@@ -68,14 +68,13 @@ const requerLogin = (req, res, next) => {
   }
 }
 
-const jaLogado = (res, req, next) => {
-  if (req.session.userid) {
-    return res.redirect('/dashoard')
+app.get('/api/auth/me', (req, res) => {
+  if(req.session.userid) {
+    return res.json({loggedIn: true, userId: req.session.userid})
+  } else {
+    res.status(401).json({loggedIn: false})
   }
-  else {
-    next()
-  }
-}
+})
 
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
@@ -111,6 +110,8 @@ app.post('/criar-conta', async (req, res) => {
       'INSERT INTO cadastro (nome, email, senha) VALUES ($1, $2, $3)',
       [nome, email, hash]
     )
+
+    console.log(novoUsuario)
 
     const userid = novoUsuario.rows[0].id
     req.session.userid = userid

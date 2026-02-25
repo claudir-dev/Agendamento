@@ -2,13 +2,33 @@
 
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Icone from "@/app/components/icone";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setemail] = useState('')     
   const [senha, setsenha] = useState('')
   const router = useRouter()
   const Login = async () => {
+
+    useEffect(() => {
+      const verificarSesaao = async () => {
+
+        try {
+            const response = await fetch('http://localhost:3002/api/auth/me', {
+              credentials: 'include'
+            })
+
+            if(response.ok) {
+              return router.push('/home')
+            }
+        } catch (err) {
+          console.log('usuario não está logado')
+        }
+
+      }
+      verificarSesaao()
+    }, [])
+    
     try {
 
       if (!email || !senha) {
