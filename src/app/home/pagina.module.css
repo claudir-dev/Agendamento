@@ -104,6 +104,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.3s ease;
+  background-color: rgb(25, 182, 25);
 }
 .cta:hover {
   transform: scale(1.04);

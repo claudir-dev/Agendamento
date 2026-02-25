@@ -49,7 +49,7 @@ export default function Home () {
                     <div className={styles.heroText}>
                         <h1>Agenda Seu Horário</h1>
                         <p>Rápido, fácil e sem complicação.</p>
-                        <button className={styles.cta}>Agendar Agora</button>
+                        <button className={styles.cta} onClick={schedule}>Agendar Agora</button>
                     </div>
 
                     <div className={styles.heroImg}>

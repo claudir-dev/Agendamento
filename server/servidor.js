@@ -13,6 +13,7 @@ import { IoMdReturnRight } from 'react-icons/io'
 import session from 'express-session'
 import pgSession from 'connect-pg-simple'
 import next from 'next'
+import { RiCentosLine } from 'react-icons/ri'
 dotenv.config()  
 const app = express()
 app.use(cors({
@@ -53,6 +54,7 @@ app.use(session({
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
+  rolling: true,
   cookie: {
     secure: false,
     httpOnly: true,
@@ -117,21 +119,21 @@ app.post('/criar-conta', async (req, res) => {
     const hash = await bcrypt.hash(senha, 10)
     console.log(hash)
 
-    const novoUsuario = await pool.query(
-      'INSERT INTO cadastro (nome, email, senha) VALUES ($1, $2, $3)',
-      [nome, email, hash]
-    )
+    const query = 'INSERT INTO cadastro (nome, email, senha) VALUES ($1, $2, $3) RETURNING id';
+    const values = [nome, email, hash]
 
-    console.log(novoUsuario)
+    const ressult = await pool.query(query, values)
+    console.log(ressult)
 
-    req.session.userid = novoUsuario.rows[0].id
+    req.session.userid = ressult.rows[0].id
+    console.log(req.session.userid)
      
     req.session.save((err) => {
       if(err) { 
         return res.status(500).json({error: 'Erro ao criar sessão'})
       }
 
-      return res.json({ message: 'Usuário cadastrado com sucesso',});
+      return res.json({ message: 'Usuário e sessão criada com sucesso',});
     })
 
   } catch (error) {
