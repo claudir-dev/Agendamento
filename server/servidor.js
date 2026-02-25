@@ -76,6 +76,16 @@ app.get('/api/auth/me', (req, res) => {
   }
 })
 
+app.delete('/api/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if(err) {
+       return res.status(500).json({success: false, mensage: 'Erro ai sair'})
+    }
+  })
+  res.clearCookie('connect.sid')
+  return res.json({success: true})
+})
+
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
 });
@@ -97,7 +107,8 @@ app.post('/criar-conta', async (req, res) => {
       'SELECT * FROM cadastro WHERE email = $1',
       [email]
     )
-     
+
+    console.log(existe)
 
     if (existe.rows.length > 0) {
       return res.status(400).json({ error: 'Usuário já cadastrado' });
@@ -113,9 +124,8 @@ app.post('/criar-conta', async (req, res) => {
 
     console.log(novoUsuario)
 
-    const userid = novoUsuario.rows[0].id
-    req.session.userid = userid
-
+    req.session.userid = novoUsuario.rows[0].id
+     
     req.session.save((err) => {
       if(err) { 
         return res.status(500).json({error: 'Erro ao criar sessão'})

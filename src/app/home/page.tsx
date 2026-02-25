@@ -11,6 +11,21 @@ export default function Home () {
     const Abadata = () => {
         router.push('/escolher-data')
     }
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:3002/api/logout', {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+
+            if (response.ok) {
+                router.push('/')
+            }
+
+        } catch (err) {
+            console.log('Erro ao fazer logout', err)
+        }
+    }
     return (
         <>
             <main className={styles.background}>
@@ -25,6 +40,9 @@ export default function Home () {
                             <li className={styles.lista}><a className={styles.items} href="">Agenda</a></li>
                             <li className={styles.lista}><a className={styles.items} href="">Contato</a></li>
                         </ul>
+                        <div>
+                            <button className={styles.bnt_sair} onClick={handleLogout}>Sair</button>
+                        </div>
                     </div>
                 </div>
                 <section className={styles.hero}>

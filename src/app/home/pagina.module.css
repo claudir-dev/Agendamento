@@ -32,6 +32,24 @@
   gap: 10px;
   font-weight: bold;
 }
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+.bnt_sair {
+  position: relative;
+  text-align: center;
+  bottom: 5px;
+  background-color: rgb(223, 37, 37);
+  color: white;
+  border: none;
+  transition: transform 0.3   s ease;
+}
+.bnt_sair:hover {
+  transform: scale(1.04);
+}
 .links_nav {
   display: flex;
   align-items: center;

@@ -8,9 +8,8 @@ export default function Login() {
   const [email, setemail] = useState('')     
   const [senha, setsenha] = useState('')
   const router = useRouter()
-  const Login = async () => {
 
-    useEffect(() => {
+  useEffect(() => {
       const verificarSesaao = async () => {
 
         try {
@@ -27,7 +26,10 @@ export default function Login() {
 
       }
       verificarSesaao()
-    }, [])
+  }, [])
+
+
+  const Login = async () => {
     
     try {
 
