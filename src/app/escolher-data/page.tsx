@@ -5,36 +5,44 @@ import {DayPicker} from 'react-day-picker'
 import styles from '@/app/escolher-data/calender.module.css'
 import { FaCalendar } from 'react-icons/fa';
 import {ptBR} from 'date-fns/locale' 
+import { useRouter } from "next/navigation";
 export default function EscolherData() {
   const [date, setDate] = useState<Date | undefined>()
   const [invalido, setinvalido] = useState(false)
   const [valido, setvalido] = useState(false)
   const [texto, settexto] = useState('')
+  const router = useRouter()
 
   const confirmar = async () => {
     const dateISO = date?.toISOString()
     
     if(!dateISO) {
       settexto('Dados invalidos')
+      setTimeout(() => {
+        setinvalido(false)
+      },5000)
       setinvalido(true)
       return
     }
 
-    const to_send = await fetch ('http://localhost:3002/Escolher-data', {
-      method: 'POST', 
-      headers: {
-        'Content-Type' : 'application/json'
-      },
-      body: JSON.stringify({dateISO}),
+    const to_send = await fetch ('http://localhost:3002/api/auth/me', {
+      method: 'GET', 
       credentials: 'include'
     })
+     const response = await to_send.json()
+    if(to_send.ok) {
+      router.push('/escolher-horario')
+    }
+    else {
+      console.log('Erro interno na api',response.error)
+    }
   }
   
 
   return (
     <div className={styles.calendar_wrapper}>
       {invalido && (
-        <div>
+        <div className={styles.invalido}>
           <p>{texto}</p>
         </div>
       )}

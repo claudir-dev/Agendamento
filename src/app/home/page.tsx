@@ -11,6 +11,9 @@ export default function Home () {
     const Abadata = () => {
         router.push('/escolher-data')
     }
+    const schedule = () => {
+        router.push('/escolher-data')
+    }
     const handleLogout = async () => {
         try {
             const response = await fetch('http://localhost:3002/api/logout', {
