@@ -88,6 +88,10 @@ app.delete('/api/logout', (req,res) => {
   return res.json({success: true})
 })
 
+app.post('save/session', (req, res) => {
+  const {Date}
+})
+
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
 });

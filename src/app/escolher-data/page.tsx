@@ -6,38 +6,68 @@ import styles from '@/app/escolher-data/calender.module.css'
 import { FaCalendar } from 'react-icons/fa';
 import {ptBR} from 'date-fns/locale' 
 import { useRouter } from "next/navigation";
+import { json } from 'stream/consumers';
 export default function EscolherData() {
   const [date, setDate] = useState<Date | undefined>()
   const [invalido, setinvalido] = useState(false)
   const [valido, setvalido] = useState(false)
   const [texto, settexto] = useState('')
+  const [Observacoes, setObservacoes] = useState('')
   const router = useRouter()
 
   const confirmar = async () => {
-    const dateISO = date?.toISOString()
-    
-    if(!dateISO) {
-      settexto('Dados invalidos')
-      setTimeout(() => {
-        setinvalido(false)
-      },5000)
-      setinvalido(true)
-      return
-    }
+    try {
+      const dateISO = date?.toISOString()
+      
+      if(!dateISO) {
+        settexto('Dados invalidos')
+        setTimeout(() => {
+          setinvalido(false)
+        },5000)
+        setinvalido(true)
+        return
+      }
 
-    const to_send = await fetch ('http://localhost:3002/api/auth/me', {
-      method: 'GET', 
-      credentials: 'include'
-    })
-     const response = await to_send.json()
-    if(to_send.ok) {
-      router.push('/escolher-horario')
-    }
-    else {
-      console.log('Erro interno na api',response.error)
+      const to_send = await fetch ('http://localhost:3002/api/auth/me', {
+        method: 'GET', 
+        credentials: 'include'
+      })
+      const response = await to_send.json()
+      if(to_send.ok) {
+        router.push('/escolher-horario')
+        return
+      }
+      else {
+        settexto('Voçê ainda não possui cadastro para fazer um agendamento')
+        setinvalido(true)
+        setTimeout(() => {
+          setinvalido(false)
+          router.push('/criar-conta')
+        }, 7000)
+        return
+      }
+      
+      const save_to_session = await fetch('http://localhost:3002/sava/session', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({date,Observacoes})
+      })
+
+      const reponse_save_session = await save_to_session.json()
+
+      if(reponse_save_session.ok) {
+        router.push('escolher-horario')
+      } else {
+        console.log('Erro no servidor',reponse_save_session.error)
+        alert('Erro interno! Tente recarregar a pagina')
+      }
+    }catch (err) {
+      console.log('erro interno', err)
     }
   }
-  
 
   return (
     <div className={styles.calendar_wrapper}>
@@ -86,6 +116,8 @@ export default function EscolherData() {
             <textarea
               className={styles.textarea}
               placeholder='Ex: Aula de reposição, sala 02, turma B.'
+              value={Observacoes}
+              onChange={(e) => setObservacoes(e.target.value)}
             />
           </div>
 

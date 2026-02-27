@@ -5,7 +5,8 @@
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-    
+    position: relative;
+    z-index: 1;
 }
 .title {
     text-align: center;
@@ -82,9 +83,6 @@
     transform: scale(1.04);
 }
 .invalido {
-  margin: 0 auto;
-  position: relative;
-  height: 100%;
   z-index: 9999;
   background-color: red;
   width: 300px;
@@ -93,7 +91,7 @@
   border-radius: 10px;
   color: #060c2e;
   font-weight: bold;
-  position: relative;
+  position: absolute;
   top: 90px;
   animation: flutuar 3s ease-in-out infinite;
   text-align: center;
