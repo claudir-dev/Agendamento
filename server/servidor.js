@@ -88,8 +88,36 @@ app.delete('/api/logout', (req,res) => {
   return res.json({success: true})
 })
 
-app.post('save/session', (req, res) => {
-  const {Date}
+app.post('/save/session', (req, res) => {
+  const {date,Observacoes} = req.body
+
+  function dataValida(date) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false
+
+    const [ano, mes, dia] = data.split('-').map(Number)
+    const dataObj = new Date(ano, mes - 1, dia)
+
+    return (
+      dataObj.getFullYear() === ano &&
+      dataObj.getMonth() === mes - 1 &&
+      dataObj.getDate() === dia
+    )
+  }
+
+  
+  if(dataValida === false || !Observacoes) {
+    res.status(401).json({error: 'Dados invalidos'})
+  }
+  else {
+    req.session.data = date
+    req.session.Observacoes = Observacoes
+
+    req.session.save((err) => {
+      res.status(500).json({error: 'Error ao salvar data e observações na session'})
+    })
+
+    res.json({success: true, message: 'Dados salvos com sucesso'})
+  }
 })
 
 app.get('/', (req, res) => {

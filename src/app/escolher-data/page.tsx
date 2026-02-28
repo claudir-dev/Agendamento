@@ -34,8 +34,23 @@ export default function EscolherData() {
       })
       const response = await to_send.json()
       if(to_send.ok) {
-        router.push('/escolher-horario')
-        return
+        const save_to_session = await fetch('http://localhost:3002/save/session', {
+          method: 'POST',
+          headers: {
+            'Content-Type' : 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({date,Observacoes})
+        })
+
+        const reponse_save_session = await save_to_session.json()
+
+        if(reponse_save_session.ok) {
+          router.push('escolher-horario')
+        } else {
+          console.log('Erro no servidor',reponse_save_session.error)
+          alert('Erro interno! Tente recarregar a pagina')
+        }
       }
       else {
         settexto('Voçê ainda não possui cadastro para fazer um agendamento')
@@ -47,23 +62,6 @@ export default function EscolherData() {
         return
       }
       
-      const save_to_session = await fetch('http://localhost:3002/sava/session', {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({date,Observacoes})
-      })
-
-      const reponse_save_session = await save_to_session.json()
-
-      if(reponse_save_session.ok) {
-        router.push('escolher-horario')
-      } else {
-        console.log('Erro no servidor',reponse_save_session.error)
-        alert('Erro interno! Tente recarregar a pagina')
-      }
     }catch (err) {
       console.log('erro interno', err)
     }
