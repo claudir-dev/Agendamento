@@ -7,7 +7,13 @@
 .page {
   min-height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+    background: 
+    radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.4), transparent 70%),
+    radial-gradient(circle at 70% 70%, rgba(30, 64, 175, 0.5), transparent 70%),
+    linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
 }
 
 .container {
@@ -15,6 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+   
 }
 
 /* CARD */
@@ -22,7 +29,7 @@
   width: 360px;
   padding: 28px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #c5b8b8 0%, #f0f5ff 100%);
+  background: linear-gradient(135deg, #b8b9c5 0%, #f0f5ff 100%);
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   text-align: center;
   z-index: 1;
@@ -116,6 +123,7 @@
   color: #cfd6ff;
   padding: 20px;
   text-align: center;
+  width: 100%;
 }
 
 .contato {
@@ -220,4 +228,29 @@ button {
 .rdp-caption {
   font-weight: bold;
   text-transform: capitalize;
+}
+.cadastro {
+  text-align: center;
+  z-index: 9999;
+  background-color:  yellow;
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: #060c2e;
+  font-weight: bold;
+  position: absolute;
+  top: 90px;
+  animation: flutuar 3s ease-in-out infinite;
+  text-align: center;
+}
+
+@keyframes flutuar {
+  0% {
+    transform: translateY(0);
+  } 50% {
+    transform: translateY(-15px);
+  } 100% {
+    transform: translateY(0);
+  }
 }

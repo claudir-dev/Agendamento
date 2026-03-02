@@ -5,10 +5,12 @@ import {useState} from 'react'
 import { json } from 'stream/consumers'
 import Link from 'next/link'
 import { useRouter } from "next/navigation";
+import styles from 'react-day-picker/style.module.css'
 export default function CriarConta() {
     const [nome,setnome] = useState('')
     const [email, setemail] = useState('')
     const [senha,setsenha] = useState('')
+    const [cadastro, setcadastro] = useState(false)
     const router = useRouter()
     const Login = async ()=> {
 
@@ -37,7 +39,10 @@ export default function CriarConta() {
                     router.push('/home')
                 } else {
                     console.log('erro na api', response.error)
-                    alert(response.error)
+                    setcadastro(true)
+                    setTimeout(() => {
+                        setcadastro(false)
+                    }, 6000)
                 }
             }   
         } catch (error) {
@@ -46,6 +51,11 @@ export default function CriarConta() {
     }    
     return (
         <main className="page">
+            {cadastro && (
+                <div className='cadastro'>
+                    <p>Este usúario ja possuí cadastro</p>
+                </div>
+            )}
             <div className="container">
                 <div className="card">
                 <div className="title">

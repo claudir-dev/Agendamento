@@ -11,6 +11,9 @@ export default function Home () {
     const Abadata = () => {
         router.push('/escolher-data')
     }
+    const horario = () => {
+        router.push('/escolher-horario')
+    }
     const schedule = () => {
         router.push('/escolher-data')
     }
@@ -73,7 +76,7 @@ export default function Home () {
                         <p><strong>1</strong><br />Escolha a data</p>
                         </div>
 
-                        <div className={styles.card}>
+                        <div className={styles.card} onClick={horario}>
                         <span>🕒</span>
                         <p><strong>2</strong><br />Selecione o horário</p>
                         </div>

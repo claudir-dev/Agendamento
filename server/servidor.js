@@ -13,7 +13,6 @@ import { IoMdReturnRight } from 'react-icons/io'
 import session from 'express-session'
 import pgSession from 'connect-pg-simple'
 import next from 'next'
-import { RiCentosLine } from 'react-icons/ri'
 dotenv.config()  
 const app = express()
 app.use(cors({
@@ -62,14 +61,6 @@ app.use(session({
   }
 }))
 
-const requerLogin = (req, res, next) => {
-  if (req.session.userid) {
-    next() 
-  } else {
-    res.redirect('/login')
-  }
-}
-
 app.get('/api/auth/me', (req, res) => {
   if(req.session.userid) {
     return res.json({loggedIn: true, userId: req.session.userid})
@@ -92,34 +83,72 @@ app.post('/save/session', (req, res) => {
   const {date,Observacoes} = req.body
 
   function dataValida(date) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false
 
-    const [ano, mes, dia] = data.split('-').map(Number)
-    const dataObj = new Date(ano, mes - 1, dia)
+      const [ano, mes, dia] = date.split('-').map(Number)
+      const dataObj = new Date(ano, mes - 1, dia)
 
-    return (
-      dataObj.getFullYear() === ano &&
-      dataObj.getMonth() === mes - 1 &&
-      dataObj.getDate() === dia
-    )
+      return (
+        dataObj.getFullYear() === ano &&
+        dataObj.getMonth() === mes - 1 &&
+        dataObj.getDate() === dia
+      )
   }
 
+  try {
+    if(dataValida(date) || !Observacoes) {
+      return res.status(401).json({error: 'Dados invalidos'})
+    }
   
-  if(dataValida === false || !Observacoes) {
-    res.status(401).json({error: 'Dados invalidos'})
-  }
-  else {
     req.session.data = date
     req.session.Observacoes = Observacoes
 
     req.session.save((err) => {
-      res.status(500).json({error: 'Error ao salvar data e observações na session'})
+      if(err) {
+        console.log('Erro',err)
+        return res.status(500).json({error: 'Error ao salvar data e observações na session'})
+      }
     })
+    
+    return res.json({success: true, message: 'Dados salvos com sucesso'})
 
-    res.json({success: true, message: 'Dados salvos com sucesso'})
-  }
+  } catch (error) {
+    console.log('Erro:',error)
+    return res.status(500).json({success: false, message: 'Erro interno no servidor'})
+  } 
 })
 
+app.post('/save/horario/session', (req,res) => {
+  const {horario} = req.body
+  try {
+    function horarioValido(horario) {
+      if(typeof horario !== 'string') return false
+
+      const regex = /^([01]\d|2[0-3]):([0-5]\d)$/
+      return regex.test(horario)
+    }
+
+    if(!horarioValido(horario)) {
+      return res.status(401).json({error: 'Horario invalido'})
+    }
+
+    req.session.horario = horario
+    req.session.save((err) => {
+      if(err) {
+        return res.status(500).json({error: 'Erro ao salva horario na sessão'})
+      }
+    })
+
+    return res.json({success: true, message: 'Horario salvo na sessão com sucesso'})
+
+  } catch (err) {
+    console.log('Erro na validação', err)
+    return res.status(500).json({error: 'Erro na validação'})
+  }  
+
+  
+
+})
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
 });
@@ -142,8 +171,6 @@ app.post('/criar-conta', async (req, res) => {
       [email]
     )
 
-    console.log(existe)
-
     if (existe.rows.length > 0) {
       return res.status(400).json({ error: 'Usuário já cadastrado' });
     }
@@ -155,7 +182,6 @@ app.post('/criar-conta', async (req, res) => {
     const values = [nome, email, hash]
 
     const ressult = await pool.query(query, values)
-    console.log(ressult)
 
     req.session.userid = ressult.rows[0].id
     console.log(req.session.userid)

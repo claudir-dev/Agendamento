@@ -44,9 +44,10 @@ export default function EscolherData() {
         })
 
         const reponse_save_session = await save_to_session.json()
+        console.log(reponse_save_session)
 
-        if(reponse_save_session.ok) {
-          router.push('escolher-horario')
+        if(reponse_save_session.success) {
+          router.push('/escolher-horario')
         } else {
           console.log('Erro no servidor',reponse_save_session.error)
           alert('Erro interno! Tente recarregar a pagina')
@@ -68,63 +69,65 @@ export default function EscolherData() {
   }
 
   return (
-    <div className={styles.calendar_wrapper}>
-      {invalido && (
-        <div className={styles.invalido}>
-          <p>{texto}</p>
-        </div>
-      )}
-
-      <div className={styles.card_calender}>
-        <div className={styles.title}>
-          <h2>📅 Escolher data</h2>
-        </div> 
-
-        <div className={styles.linha}></div> 
-
-        <div className={styles.card}>
-          <DayPicker
-            mode='single'
-            selected={date}
-            onSelect={setDate}
-            className={styles.calender}
-            locale={ptBR}
-          />
-          
-          <div className={styles.div_date}>
-            {date && (
-              <>
-                <input 
-                  className={styles.date_input}
-                  value={date ? date.toISOString().slice(0, 10) : ''} 
-                  readOnly
-                  
-                />
-                <FaCalendar className={styles.icone_calender}/>
-
-              </>
-             
-             
-            )}
-              
+    <main className={styles.main}>
+      <div className={styles.calendar_wrapper}>
+        {invalido && (
+          <div className={styles.invalido}>
+            <p>{texto}</p>
           </div>
+        )}
 
-          <div className={styles.Observacoes}>
-            <label className={styles.label}>📝 Observações</label>
-            <textarea
-              className={styles.textarea}
-              placeholder='Ex: Aula de reposição, sala 02, turma B.'
-              value={Observacoes}
-              onChange={(e) => setObservacoes(e.target.value)}
+        <div className={styles.card_calender}>
+          <div className={styles.title}>
+            <h2>📅 Escolher data</h2>
+          </div> 
+
+          <div className={styles.linha}></div> 
+
+          <div className={styles.card}>
+            <DayPicker
+              mode='single'
+              selected={date}
+              onSelect={setDate}
+              className={styles.calender}
+              locale={ptBR}
             />
-          </div>
+            
+            <div className={styles.div_date}>
+              {date && (
+                <>
+                  <input 
+                    className={styles.date_input}
+                    value={date ? date.toISOString().slice(0, 10) : ''} 
+                    readOnly
+                    
+                  />
+                  <FaCalendar className={styles.icone_calender}/>
 
-          <div className={styles.div_btn}>
-            <button className={styles.btn} onClick={confirmar}>Confirmar</button>
-          </div>
+                </>
+              
+              
+              )}
+                
+            </div>
+
+            <div className={styles.Observacoes}>
+              <label className={styles.label}>📝 Observações</label>
+              <textarea
+                className={styles.textarea}
+                placeholder='Ex: Aula de reposição, sala 02, turma B.'
+                value={Observacoes}
+                onChange={(e) => setObservacoes(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.div_btn}>
+              <button className={styles.btn} onClick={confirmar}>Confirmar</button>
+            </div>
+          </div>  
+      
         </div>  
-    
       </div>  
-    </div>  
+    </main>  
   )
 }

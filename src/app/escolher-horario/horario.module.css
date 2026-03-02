@@ -1,0 +1,48 @@
+.main {
+    background: 
+    radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.4), transparent 70%),
+    radial-gradient(circle at 70% 70%, rgba(30, 64, 175, 0.5), transparent 70%),
+    linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+.btn {
+    margin-top: 18px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.btn:hover {
+    transform: scale(1.04);
+}
+.invalido {
+  z-index: 9999;
+  background-color: red;
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: #060c2e;
+  font-weight: bold;
+  position: absolute;
+  top: 90px;
+  animation: flutuar 3s ease-in-out infinite;
+  text-align: center;
+}
+@keyframes flutuar {
+    0% {
+        transform: translateY(0);
+    } 50% {
+        transform: translateY(-15px);
+    } 100% {
+        transform: translateY(0);
+    }
+}
