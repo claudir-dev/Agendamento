@@ -7,7 +7,7 @@ import { IconClock } from '@tabler/icons-react';
 import styles from '@/app/escolher-horario/horario.module.css';
 import { tree } from 'next/dist/build/templates/app-page';
 import { useRouter } from 'next/navigation';
-
+import Navbar from '../components/nav_bar';
 export default function RelogioGrande() {
   // Referência para o input (usada para abrir o seletor visual)
   const ref = useRef<HTMLInputElement>(null);
@@ -21,7 +21,9 @@ export default function RelogioGrande() {
           setTimeout(() => {
             setinvalido(false)
           },5000)
+          return
         }
+        
         const request = await fetch('http://localhost:3002/save/horario/session', {
           method: 'POST',
           headers: {
@@ -58,6 +60,8 @@ export default function RelogioGrande() {
   );
 
   return (
+    <>
+    <Navbar></Navbar>
     <main className={styles.main}>
       {invalido && (
         <div className={styles.invalido}>
@@ -108,6 +112,7 @@ export default function RelogioGrande() {
           </Stack> 
         </Paper>
       </Center>
-    </main>   
+    </main>  
+    </> 
   );
 }

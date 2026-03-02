@@ -120,6 +120,7 @@ app.post('/save/session', (req, res) => {
 
 app.post('/save/horario/session', (req,res) => {
   const {horario} = req.body
+  console.log(horario)
   try {
     function horarioValido(horario) {
       if(typeof horario !== 'string') return false

@@ -7,6 +7,7 @@ import { FaCalendar } from 'react-icons/fa';
 import {ptBR} from 'date-fns/locale' 
 import { useRouter } from "next/navigation";
 import { json } from 'stream/consumers';
+import Navbar from '../components/nav_bar';
 export default function EscolherData() {
   const [date, setDate] = useState<Date | undefined>()
   const [invalido, setinvalido] = useState(false)
@@ -70,6 +71,7 @@ export default function EscolherData() {
 
   return (
     <main className={styles.main}>
+      <Navbar></Navbar>
       <div className={styles.calendar_wrapper}>
         {invalido && (
           <div className={styles.invalido}>

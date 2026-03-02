@@ -1,11 +1,10 @@
 'use client'
 import { FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
-import Icone from '@/app/components/icone'
 import styles from '@/app/home/pagina.module.css'
 import Image from 'next/image'
 import Img from '@/app/assets/baner.png'
 import { useRouter } from "next/navigation";
-
+import Navbar from '../components/nav_bar'
 export default function Home () {
     const router = useRouter()
     const Abadata = () => {
@@ -17,40 +16,10 @@ export default function Home () {
     const schedule = () => {
         router.push('/escolher-data')
     }
-    const handleLogout = async () => {
-        try {
-            const response = await fetch('http://localhost:3002/api/logout', {
-                method: 'DELETE',
-                credentials: 'include'
-            })
-
-            if (response.ok) {
-                router.push('/')
-            }
-
-        } catch (err) {
-            console.log('Erro ao fazer logout', err)
-        }
-    }
     return (
-        <>
-            <main className={styles.background}>
-                <div className={styles.nav}>
-                    <div className={styles.logo}>
-                        <Icone></Icone>
-                        Agendaki
-                    </div>
-                    <div className={styles.links}>
-                        <ul className={styles.links_nav}>
-                            <li className={styles.lista}><a className={styles.items} href="">Home</a></li>
-                            <li className={styles.lista}><a className={styles.items} href="">Agenda</a></li>
-                            <li className={styles.lista}><a className={styles.items} href="">Contato</a></li>
-                        </ul>
-                        <div>
-                            <button className={styles.bnt_sair} onClick={handleLogout}>Sair</button>
-                        </div>
-                    </div>
-                </div>
+        <>  
+        <main className={styles.background}>
+            <Navbar></Navbar>
                 <section className={styles.hero}>
                     <div className={styles.heroText}>
                         <h1>Agenda Seu Horário</h1>
@@ -110,8 +79,8 @@ export default function Home () {
 
                     <button className={styles.secondaryBtn}>Ver horários</button>
                 </section>
-    
-            </main>
+            </main>    
+
             <footer className={styles.dados}>
                 <p>
                     2025 <strong>Agendaaki</strong> · Todos os direitos reservados
