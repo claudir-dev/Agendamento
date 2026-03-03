@@ -16,6 +16,9 @@ export default function Home () {
     const schedule = () => {
         router.push('/escolher-data')
     }
+    const confirm_appointment = () => {
+        router.push('/confirma-agendamento')
+    }
     return (
         <>  
         <main className={styles.background}>
@@ -50,7 +53,7 @@ export default function Home () {
                         <p><strong>2</strong><br />Selecione o horário</p>
                         </div>
 
-                        <div className={styles.card}>
+                        <div className={styles.card} onClick={confirm_appointment}>
                         <span>✅</span>
                         <p><strong>3</strong><br />Confirme o agendamento</p>
                         </div>

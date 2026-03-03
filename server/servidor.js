@@ -146,9 +146,17 @@ app.post('/save/horario/session', (req,res) => {
     console.log('Erro na validação', err)
     return res.status(500).json({error: 'Erro na validação'})
   }  
-
-  
-
+})
+app.get('/buscar/dados/session', (req, res) => {
+  try {
+    const data = req.session.data
+    const Observacoes = req.session.Observacoes
+    const horario = req.session.horario
+    
+    res.json({success: true, message: 'Dados encontrados com sucessos', dados: [data, Observacoes, horario]})
+  } catch (err) {
+    return res.status(500).json({error: 'Erro ao busca na dados na session'})
+  }  
 })
 app.get('/', (req, res) => {
   res.send('API funcionando 🚀');
