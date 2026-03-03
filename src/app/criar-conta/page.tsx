@@ -6,11 +6,13 @@ import { json } from 'stream/consumers'
 import Link from 'next/link'
 import { useRouter } from "next/navigation";
 import styles from 'react-day-picker/style.module.css'
+import { useSetState } from '@mantine/hooks'
 export default function CriarConta() {
     const [nome,setnome] = useState('')
     const [email, setemail] = useState('')
     const [senha,setsenha] = useState('')
     const [cadastro, setcadastro] = useState(false)
+    const [texto, settexto] = useState('')
     const router = useRouter()
     const Login = async ()=> {
 
@@ -38,7 +40,8 @@ export default function CriarConta() {
                 if(request.ok) {
                     router.push('/home')
                 } else {
-                    console.log('erro na api', response.error)
+                    console.log('erro na api', response.error) 
+                    settexto(response.error)
                     setcadastro(true)
                     setTimeout(() => {
                         setcadastro(false)
@@ -53,7 +56,7 @@ export default function CriarConta() {
         <main className="page">
             {cadastro && (
                 <div className='cadastro'>
-                    <p>Este usúario ja possuí cadastro</p>
+                    <p>{texto}</p>
                 </div>
             )}
             <div className="container">
@@ -73,7 +76,7 @@ export default function CriarConta() {
                     <button onClick={Login}>Criar-conta</button>
                 </div>
 
-                <a className="forgot" href="#">
+                <a className="forgot" href="/esqueci-senha">
                     Esqueci minha senha
                 </a>
 

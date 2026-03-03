@@ -9,7 +9,6 @@ import { tree } from 'next/dist/build/templates/app-page';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/nav_bar';
 export default function RelogioGrande() {
-  // Referência para o input (usada para abrir o seletor visual)
   const ref = useRef<HTMLInputElement>(null);
   const [horario, setHorario] = useState<string>('');
   const [invalido, setinvalido] = useState(false)
@@ -61,8 +60,10 @@ export default function RelogioGrande() {
 
   return (
     <>
-    <Navbar></Navbar>
     <main className={styles.main}>
+      <div>
+        <Navbar></Navbar>
+      </div>
       {invalido && (
         <div className={styles.invalido}>
           <p>Horário invalido</p>

@@ -84,14 +84,14 @@ export default function ConfirmaAgendamento() {
                         <ThemeIcon size="lg" radius="md" color="blue">
                         <IconClock size={20} />
                         </ThemeIcon>
-                        <Text>Horário: <b>{hora}</b></Text>
+                        <Text>Horário: <b>{hora? hora: 'Horário não definido'}</b></Text>
                     </Group>
 
                     <Group>
                         <ThemeIcon size="lg" radius="md" color="blue">
                         <IconFileText size={20} />
                         </ThemeIcon>
-                        <Text>Observações: <b>{observacoes}</b></Text>
+                        <Text>Observações: <b>{observacoes? observacoes: 'Observações nao definida'}</b></Text>
                     </Group>
 
                     <Divider />
