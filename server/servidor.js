@@ -120,7 +120,9 @@ app.post('/save/session', (req, res) => {
 
 app.post('/save/horario/session', (req,res) => {
   const {horario} = req.body
-  console.log(horario)
+  if(!req.session.data) {
+      return res.status(400).json({error: 'Você não selecionou uma data!'})
+    }
   try {
     function horarioValido(horario) {
       if(typeof horario !== 'string') return false
