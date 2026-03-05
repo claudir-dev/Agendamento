@@ -80,12 +80,13 @@ app.delete('/api/logout', (req,res) => {
 })
 
 app.post('/save/session', (req, res) => {
-  const {date,Observacoes} = req.body
+  const {dateISO,Observacoes} = req.body
+  console.log(dateISO)
 
-  function dataValida(date) {
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false
+  function dataValida(dateISO) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) return false
 
-      const [ano, mes, dia] = date.split('-').map(Number)
+      const [ano, mes, dia] = dateISO.split('-').map(Number)
       const dataObj = new Date(ano, mes - 1, dia)
 
       return (
@@ -96,11 +97,11 @@ app.post('/save/session', (req, res) => {
   }
 
   try {
-    if(dataValida(date) || !Observacoes) {
+    if(dataValida(dateISO) || !Observacoes) {
       return res.status(401).json({error: 'Dados invalidos'})
     }
   
-    req.session.data = date
+    req.session.data = dateISO
     req.session.Observacoes = Observacoes
 
     req.session.save((err) => {

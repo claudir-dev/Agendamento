@@ -18,7 +18,8 @@ export default function EscolherData() {
 
   const confirmar = async () => {
     try {
-      const dateISO = date?.toISOString()
+      const dateISO = date?.toLocaleDateString()
+      console.log(dateISO)
       
       if(!dateISO) {
         settexto('Dados invalidos')
@@ -41,7 +42,7 @@ export default function EscolherData() {
             'Content-Type' : 'application/json'
           },
           credentials: 'include',
-          body: JSON.stringify({date,Observacoes})
+          body: JSON.stringify({dateISO,Observacoes})
         })
 
         const reponse_save_session = await save_to_session.json()
@@ -50,7 +51,7 @@ export default function EscolherData() {
         if(reponse_save_session.success) {
           router.push('/escolher-horario')
         } else {
-          console.log('Erro no servidor',reponse_save_session.error)
+          console.log('Erro no servidor:',reponse_save_session.error)
           alert('Erro interno! Tente recarregar a pagina')
         }
       }
@@ -100,7 +101,7 @@ export default function EscolherData() {
                 <>
                   <input 
                     className={styles.date_input}
-                    value={date ? date.toISOString().slice(0, 10) : ''} 
+                    value={date ? new Date(date).toLocaleDateString('pt-br'): ''} 
                     readOnly
                     
                   />
