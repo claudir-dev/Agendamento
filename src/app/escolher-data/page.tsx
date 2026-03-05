@@ -52,7 +52,11 @@ export default function EscolherData() {
           router.push('/escolher-horario')
         } else {
           console.log('Erro no servidor:',reponse_save_session.error)
-          alert('Erro interno! Tente recarregar a pagina')
+          settexto(reponse_save_session.error)
+          setinvalido(true)
+          setTimeout(() => {
+            setinvalido(false)
+          },6000)
         }
       }
       else {

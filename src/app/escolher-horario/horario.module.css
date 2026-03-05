@@ -3,7 +3,7 @@
     radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.4), transparent 70%),
     radial-gradient(circle at 70% 70%, rgba(30, 64, 175, 0.5), transparent 70%),
     linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
-    
+
 }
 .btn {
     margin-top: 18px;
@@ -22,6 +22,8 @@
     transform: scale(1.04);
 }
 .invalido {
+  width: 100%;
+  
   z-index: 9999;
   background-color: red;
   width: 300px;

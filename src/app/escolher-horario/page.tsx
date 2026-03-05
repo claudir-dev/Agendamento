@@ -8,14 +8,17 @@ import styles from '@/app/escolher-horario/horario.module.css';
 import { tree } from 'next/dist/build/templates/app-page';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/nav_bar';
+import { truncate } from 'node:fs';
 export default function RelogioGrande() {
   const ref = useRef<HTMLInputElement>(null);
   const [horario, setHorario] = useState<string>('');
   const [invalido, setinvalido] = useState(false)
+  const [texto, settexto]  = useState('')
   const router = useRouter()
     const confirm_schedule = async () => {
       try {
         if(!horario) {
+          settexto('Horário inválido')
           setinvalido(true)
           setTimeout(() => {
             setinvalido(false)
@@ -39,7 +42,11 @@ export default function RelogioGrande() {
         }
         else {
           console.log(response.error)
-          alert('Erro interno! tente recarregar a página')
+          settexto(response.error)
+          setinvalido(true)
+          setTimeout(() => {
+            setinvalido(false)
+          },6000)
         }
       } catch (err) {
         console.log(err)
@@ -64,9 +71,9 @@ export default function RelogioGrande() {
       <div>
         <Navbar></Navbar>
       </div>
-      {invalido && (
+      {invalido && ( 
         <div className={styles.invalido}>
-          <p>Horário invalido</p>
+          <p>{texto}</p>
         </div>
       )}
       <Center style={{ height: '100vh',}}>
