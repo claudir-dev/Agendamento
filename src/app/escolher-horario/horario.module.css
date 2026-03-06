@@ -23,7 +23,8 @@
 }
 .invalido {
   width: 100%;
-  
+  left: calc(50% - 150px);
+  margin-top: 50px;
   z-index: 9999;
   background-color: red;
   width: 300px;

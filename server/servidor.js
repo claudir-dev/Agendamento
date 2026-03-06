@@ -212,6 +212,41 @@ app.post('/criar-conta', async (req, res) => {
   }
 });
 
+app.post('/confirma-agendamento', async (req,res) => {
+  const {data, hora, Observacoes} = req.body
+
+  if(!data || !hora || !Observacoes) {
+    return res.status(401).json({error: 'Dados inválidos'})
+  }
+
+  try {
+
+    const agendamento = (
+      'INSERT INTO agendamento_data (datas, observacoes, horario) VALUES ($1, $2, $3)'
+    ) 
+    const insert = await pool.query(agendamento, [data,Observacoes,hora ])
+    
+    if(insert.affectedRows > 0) {
+      delete req.session.data
+      delete req.session.hora
+      delete req.session.Observacoes
+      return
+    }
+
+    res.session.save((err) => {
+      if(err) {
+        return res.status(400).json({error: 'Erro ao deleta a sessão'})
+      }
+    })
+
+    res.json({success: true, message: 'Agendamento cadastrado'})
+
+  }catch (err) {
+    console.log('erro interno', err)
+    return res.status(500).json({error: 'Erro interno no servidor'})
+  }
+})
+
 app.post('/login', async (req, res) => {
     const {email, senha} = req.body
     console.log(email, senha)

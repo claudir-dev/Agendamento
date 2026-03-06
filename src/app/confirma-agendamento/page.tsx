@@ -47,6 +47,15 @@ export default function ConfirmaAgendamento() {
 
         carregarDados()
     }, [])
+
+    const Realizar_agendamento = async () => {
+        if (!data || !hora || !observacoes) {
+            alert('Não é possivel realizar o agendamneto')
+            return
+        }
+
+        
+    }
     return (
        <main className={styles.main}>
         <div>
@@ -106,8 +115,9 @@ export default function ConfirmaAgendamento() {
                         </Button>
 
                         <Button
+                        
                         color="green"
-                        onClick={() => console.log('Confirmado')}
+                        onClick={Realizar_agendamento}
                         >
                         Confirmar
                         </Button>

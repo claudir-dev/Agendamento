@@ -5,6 +5,7 @@
     radial-gradient(circle at 70% 70%, rgba(30, 64, 175, 0.5), transparent 70%),
     linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
     min-height: 90vh;
+    color: white;
 }
 .dados {
   background: #060c2e;
