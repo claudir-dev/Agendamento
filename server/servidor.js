@@ -51,7 +51,7 @@ app.use(session({
     tableName: 'session'
   }),
   secret: process.env.SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   rolling: true,
   cookie: {
@@ -213,33 +213,32 @@ app.post('/criar-conta', async (req, res) => {
 });
 
 app.post('/confirma-agendamento', async (req,res) => {
-  const {data, hora, Observacoes} = req.body
-
-  if(!data || !hora || !Observacoes) {
+  const {data, hora, observacoes} = req.body
+  
+  if(!data || !hora || !observacoes) {
     return res.status(401).json({error: 'Dados inválidos'})
   }
 
   try {
 
     const agendamento = (
-      'INSERT INTO agendamento_data (datas, observacoes, horario) VALUES ($1, $2, $3)'
+      'INSERT INTO agendamento_datas (datas, observacoes, horario) VALUES ($1, $2, $3) RETURNING id'
     ) 
-    const insert = await pool.query(agendamento, [data,Observacoes,hora ])
+    const insert = await pool.query(agendamento, [data,observacoes,hora ])
     
-    if(insert.affectedRows > 0) {
-      delete req.session.data
-      delete req.session.hora
-      delete req.session.Observacoes
-      return
+    if(insert.rows[0]) {
+      delete req.session.data 
+      delete req.session.horario
+      delete req.session.Observacoes 
+
+      req.session.save((err) => {
+        if(err) {
+          console.log(err)
+          return res.status(400).json({error: 'Erro ao deleta a sessão'})
+        } 
+        return res.json({success: true, message: 'Agendamento cadastrado'})
+      })
     }
-
-    res.session.save((err) => {
-      if(err) {
-        return res.status(400).json({error: 'Erro ao deleta a sessão'})
-      }
-    })
-
-    res.json({success: true, message: 'Agendamento cadastrado'})
 
   }catch (err) {
     console.log('erro interno', err)

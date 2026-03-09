@@ -9,12 +9,16 @@ import Flex from "react-calendar/dist/Flex.js"
 import { request } from "http"
 import { json, text } from "stream/consumers"
 import { set } from "date-fns"
+import { FaSleigh } from "react-icons/fa"
 export default function ConfirmaAgendamento() {
     const [data, setdata] = useState()
     const [hora, sethora] = useState()
     const [observacoes, setobservacoes] = useState()
     const [error, seterror] = useState(false)
     const [texto, settexto] = useState('')
+    const [sucesso, setSucesso] = useState(false)
+    const [Loading, setLoading] = useState(false)
+    const [trasnpar, settrasnpar] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -49,18 +53,68 @@ export default function ConfirmaAgendamento() {
     }, [])
 
     const Realizar_agendamento = async () => {
-        if (!data || !hora || !observacoes) {
-            alert('Não é possivel realizar o agendamneto')
-            return
-        }
+        try {
+            settrasnpar(true)
+            setLoading(true)
+            if (!data || !hora || !observacoes) {
+                settexto('Dados inválidos! Não é possível realizar o agendamento')
+                seterror(true) 
+                setTimeout(() => {
+                    seterror(false)
+                }, 5000)
+                return
+            }
 
-        
+            const request = await fetch('http://localhost:3002/confirma-agendamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({data,observacoes,hora})
+            })
+
+            const response = await request.json()
+
+            if(response.success) {
+                settexto('Agedamento realizado')
+                setSucesso(true)
+                setTimeout(() => {
+                    setSucesso(false)
+                },5000)
+            }
+            else {
+                seterror(true)
+                settexto(response.error)
+                setTimeout(() => {
+                    seterror(false)
+                }, 6000)
+            }
+        } catch (err) {
+            console.log('erro ao enviar dados para api:', err)
+            alert('Ao deu errado! Estamos verifiacando o error.')
+        }  finally {
+            settrasnpar(false)
+            setLoading(false)
+        }
     }
     return (
        <main className={styles.main}>
         <div>
             <Navbar></Navbar>
         </div>
+        
+        {Loading && (
+            <div className={styles.carregar}>
+                <span className={styles.span}></span>
+            </div>
+        )}
+        
+        {sucesso && (
+            <div className={styles.div_sucesso}>
+                <p>{texto}</p>
+            </div>
+        )}
         {error && (
             <div className={styles.invalido}>
                 <p>{texto}</p>
@@ -73,9 +127,9 @@ export default function ConfirmaAgendamento() {
                 radius="lg"
                 withBorder
                 ta="center"
-                style={{ width: 480, margin: '0 auto',  }}
+                style={{ width: 480, margin: '0 auto',}}
             >
-                <Stack gap="md">
+                <Stack gap="md" style={{ opacity: trasnpar ? 0.1 : ''}}>
                     <Text size="xl" fw={700} ta="center" c="black.7">
                         Confirme seu Agendamento
                     </Text>
