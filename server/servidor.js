@@ -79,7 +79,7 @@ app.delete('/api/logout', (req,res) => {
   return res.json({success: true})
 })
 
-app.post('/save/session', (req, res) => {
+app.post('/save/session', async (req, res) => {
   const {dateISO,Observacoes} = req.body
   console.log(dateISO)
 
@@ -99,6 +99,14 @@ app.post('/save/session', (req, res) => {
   try {
     if(dataValida(dateISO) || !Observacoes) {
       return res.status(401).json({error: 'Dados invalidos'})
+    }
+
+    const dateexsit = await pool.query('SELECT * FROM agadamento_datas WHERE datas = $1',
+      [dateISO]
+    )
+
+    if(dateISO.rwos[0]) {
+      return res.status(401).json({success: false, message: 'Esta data '})
     }
   
     req.session.data = dateISO

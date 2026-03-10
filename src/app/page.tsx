@@ -4,12 +4,17 @@ import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Icone from "@/app/components/icone";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { set } from "date-fns";
+import { HasLoadingBoundary } from "next/dist/server/app-render/types";
 export default function Login() {
   const [email, setemail] = useState('')     
   const [senha, setsenha] = useState('')
+  const [loading, setloading] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
+    setloading(true)
+    try {
       const verificarSesaao = async () => {
 
         try {
@@ -26,11 +31,17 @@ export default function Login() {
 
       }
       verificarSesaao()
+    } catch (error) {
+      console.log('Erro ao verificar se usuario esta logado', error)
+      alert('Algo deu errado! Já estamos verificando o problema')
+    } finally {
+      setloading(false)
+    }
   }, [])
 
 
   const Login = async () => {
-    
+    setloading(true)
     try {
 
       if (!email || !senha) {
@@ -64,12 +75,19 @@ export default function Login() {
     } catch(error) { 
       console.error('Erro ao enviar dados para a API', error)
       alert('Erro interno na API')
-    }  
+    }  finally {
+      setloading(false)
+    }
   }
   return (
     <main className="page">
       <div className="container">
-        <div className="card">
+      {loading && (
+        <div className="carregar" >
+          <span className='span'></span>
+        </div>
+      )}
+        <div className="card" style={{opacity: loading ? 0.1: ''}}>
           <div className="title">
             <Icone />
             <h1>Agendaaki</h1>
