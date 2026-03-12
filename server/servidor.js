@@ -65,7 +65,7 @@ app.get('/api/auth/me', (req, res) => {
   if(req.session.userid) {
     return res.json({loggedIn: true, userId: req.session.userid})
   } else {
-    res.status(401).json({loggedIn: false})
+    res.status(400).json({loggedIn: false})
   }
 })
 
@@ -99,14 +99,6 @@ app.post('/save/session', async (req, res) => {
   try {
     if(dataValida(dateISO) || !Observacoes) {
       return res.status(401).json({error: 'Dados invalidos'})
-    }
-
-    const dateexsit = await pool.query('SELECT * FROM agadamento_datas WHERE datas = $1',
-      [dateISO]
-    )
-
-    if(dateISO.rwos[0]) {
-      return res.status(401).json({success: false, message: 'Esta data '})
     }
   
     req.session.data = dateISO
@@ -174,7 +166,6 @@ app.get('/', (req, res) => {
 });
 app.post('/criar-conta', async (req, res) => {
   const { nome, email, senha } = req.body;
-  console.log(nome, email, senha)
 
   if (!nome || !email || !senha) {
     return res.status(400).json({ error: 'Dados inválidos' });
@@ -228,11 +219,20 @@ app.post('/confirma-agendamento', async (req,res) => {
   }
 
   try {
+    const busca_agendamento = await pool.query('SELECT * FROM agendamento_datas WHERE datas = $1 AND horario = $2', 
+      [data, hora]
+    )
+
+    console.log(busca_agendamento)
+
+    if(busca_agendamento.rows.length > 0) {
+      return res.status(401).json({error: 'Data e horario ja possui agendamento!'})
+    }
 
     const agendamento = (
       'INSERT INTO agendamento_datas (datas, observacoes, horario) VALUES ($1, $2, $3) RETURNING id'
     ) 
-    const insert = await pool.query(agendamento, [data,observacoes,hora ])
+    const insert = await pool.query(agendamento, [data,observacoes,hora])
     
     if(insert.rows[0]) {
       delete req.session.data 

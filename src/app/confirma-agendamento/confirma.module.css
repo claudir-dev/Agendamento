@@ -26,8 +26,10 @@
     z-index: 9999;
   background-color:rgb(21, 216, 21);
   width: 300px;
+  left: calc(50% - 155px);
   text-align: center;
   padding: 20px;
+  top: 90px;
   border-radius: 10px;
   color: #060c2e;
   font-weight: bold;
