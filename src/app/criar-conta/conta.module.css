@@ -1,0 +1,28 @@
+.carregar {
+   width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: absolute;
+    z-index: 9999;
+}
+.span {
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 12px solid rgb(48, 141, 218);
+    display: block;
+    animation: loading 1s linear infinite;
+    border-top: 12px solid transparent;
+    margin-bottom: 110px;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    } 100% {
+        transform: rotate(360deg);
+    }
+}

@@ -19,7 +19,6 @@ export default function EscolherData() {
   const confirmar = async () => {
     try {
       const dateISO = date?.toLocaleDateString()
-      console.log(dateISO)
       
       if(!dateISO) {
         settexto('Dados invalidos')

@@ -65,7 +65,7 @@ app.get('/api/auth/me', (req, res) => {
   if(req.session.userid) {
     return res.json({loggedIn: true, userId: req.session.userid})
   } else {
-    res.status(400).json({loggedIn: false})
+   return res.status(400).json({loggedIn: false})
   }
 })
 
@@ -284,7 +284,7 @@ app.post('/login', async (req, res) => {
         console.log(senhaBanco)
 
         const senhaValida = await bcrypt.compare(
-          senha, senhaBanco
+          senha, senhaBanco 
         )
 
         if(!senhaValida) {

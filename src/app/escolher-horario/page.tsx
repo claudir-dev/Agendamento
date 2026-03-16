@@ -74,7 +74,7 @@ export default function RelogioGrande() {
       {invalido && ( 
         <div className={styles.invalido}>
           <p>{texto}</p>
-        </div>
+         </div>
       )}
       <Center style={{ height: '100vh',}}>
         <Paper shadow="md" p="xl" radius="lg" withBorder style={{ width: 450 }}>
